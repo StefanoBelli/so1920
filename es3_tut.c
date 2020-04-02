@@ -15,8 +15,6 @@ int main(int argc, char** argv) {
 	memcpy(str, ".\\es3_tut.exe ", 14);
 	fgets(str + 14, INPUT_MAX, stdin);
 
-	puts(str);
-
 	STARTUPINFO si;
 	PROCESS_INFORMATION pi;
 
