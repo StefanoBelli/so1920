@@ -41,5 +41,8 @@ int main(int argc, char** argv) {
 	}
 
 	WaitForSingleObject(pi.hProcess, INFINITE);
+	CloseHandle(pi.hProcess);
+	CloseHandle(pi.hThread);
+
 	return 0;
 }
