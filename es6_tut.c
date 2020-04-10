@@ -59,9 +59,11 @@ int main() {
 	
 	ResumeThread(threads[0]);
 
-	for (int i = 0; i < N_THREADS; ++i)
+	for (int i = 0; i < N_THREADS; ++i) {
 		if (WaitForSingleObject(threads[i], INFINITE) == WAIT_FAILED)
 			puts("main thr: WaitForSingleObject failed (WAIT_FAILED)");
+		CloseHandle(threads[i]);
+	}
 
 	return 0;
 }
