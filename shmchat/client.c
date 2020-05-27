@@ -21,12 +21,16 @@ int main() {
 	char* text_region = shared_memory + sizeof(sem_t) + sizeof(sem_t);
 
 	do {
+//		(* funziona allo stesso modo, prima non andava per errore di init del semaforo, vedi commit precedenti *)
+//		error(sem_wait((sem_t*)shared_memory + sizeof(sem_t)), "sem_wait");
+//		printf("ack\n");
+	
 		printf("text: ");
 		fflush(stdout);
 		char tmpbuf[BUF_SIZE] = { 0 };
 		fgets(text_region, BUF_SIZE, stdin);
-		memcpy(tmpbuf, text_region, BUF_SIZE);
 		error(sem_post((sem_t*) shared_memory), "sem_post");
+		memcpy(tmpbuf, text_region, BUF_SIZE);
 		error(sem_wait((sem_t*)shared_memory + sizeof(sem_t)), "sem_wait");
 		printf("ack\n");
 		

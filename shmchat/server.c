@@ -22,7 +22,7 @@ int main() {
 
 	void* shared_memory = shmat(shmid, NULL, 0);
 	error(sem_init((sem_t*)shared_memory, 1, 0), "sem_init");
-	error(sem_init((sem_t*)shared_memory, 1, 0), "sem_init");
+	error(sem_init((sem_t*)shared_memory + sizeof(sem_t), 1, 0), "sem_init"); //ed è proprio qui che vorrei scrivere un bestemmione (vedi commit precedente)
 
 	char* text_region = shared_memory + sizeof(sem_t) + sizeof(sem_t);
 
