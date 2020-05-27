@@ -47,7 +47,7 @@ int main() {
 	int check = mkfifo("server_fifo", O_CREAT | O_EXCL | S_IRUSR | S_IWUSR);
 	error_exit(check, "mkfifo");
 
-	int fd = open("server_fifo", O_RDWR);
+	int fd = open("server_fifo",O_RDONLY);
 	error_exit(fd, "open");
 
 	char cwd[PATH_MAX];
