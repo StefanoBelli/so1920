@@ -50,7 +50,7 @@ void ansthr(int* fds) {
 	free(fds);
 	fds = NULL;
 
-	char buf[6] = { 0 };
+	char buf[7] = { 0 };
 	read(rfd, buf, 6);
 	
 	if(strcmp(buf, "svcreq") == 0)
