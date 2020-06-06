@@ -2,19 +2,9 @@
 #define SERVER_FIFO "server_fifo"
 #endif
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <linux/limits.h>
-#include <pthread.h>
+#include <Windows.h>
 
-#define PTHREAD_ROUTINE(rt) ((void* (*)(void*))rt)
-#define PTHREAD_ARGUMENT(arg) ((void*)arg)
+#define THREAD_ROUTINE((LPTHREAD)
 
 #define generic_error(x, msg) \
 	if(x < 0) { \
