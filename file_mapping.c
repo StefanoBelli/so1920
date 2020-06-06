@@ -46,8 +46,8 @@ int main() {
 	struct stat stat_buf;
 	fstat(fd, &stat_buf);
 
-
 	char* addrStart = (char*)mmap(NULL, stat_buf.st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
+	close(fd);
 	if (addrStart == MAP_FAILED) {
 		perror("mmap");
 		return 2;
