@@ -37,13 +37,23 @@ int main() {
 
 	// 4) send HTTP request & get HTTP response
 	char http_get_req[] = "GET /index.html HTTP/1.1\r\nUser-Agent: test-http-client\r\nHost: yahoo.com\r\n\r\n";
-	send(sd, http_get_req, sizeof(http_get_req), 0);
+	if(send(sd, http_get_req, sizeof(http_get_req), 0) < 0) {
+		perror("send");
+		close(sd);
+		return EXIT_FAILURE;
+	}
 
 	int reason;
 	char buf[CHUNK_SIZE] = { 0 };
 	while((reason = recv(sd, buf, CHUNK_SIZE, 0)) > 0) {
-		puts(buf);
+		printf("%s",buf);
 		memset(buf, 0, CHUNK_SIZE);
+	}
+
+	if(reason < 0) {
+		perror("recv");
+		close(sd);
+		return EXIT_FAILURE;
 	}
 
 	close(sd);
