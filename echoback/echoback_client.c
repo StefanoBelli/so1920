@@ -41,14 +41,14 @@ int main(int argc, char** argv) {
 		memset(inout_buf, 0, 256);
 		fgets(inout_buf, 255, stdin);
 
-		VERBOSE puts("sending");
-
 		if(send(sd, inout_buf, strlen(inout_buf) + 1, MSG_NOSIGNAL) < 0) {
 			if(errno == EPIPE) puts("server closed connection");
 			else perror("send");
 
 			break;
 		}
+
+		VERBOSE puts("sent");
 
 		memset(inout_buf, 0, 256);
 		int res = recv(sd, inout_buf, 256, 0);	
@@ -60,7 +60,7 @@ int main(int argc, char** argv) {
 			break;
 		}
 
-		VERBOSE { printf("gotans\n:"); fflush(stdout); }
+		VERBOSE printf("gotans\n:");
 		printf("%s\n",inout_buf);
 		
 	} while(1);
