@@ -32,7 +32,7 @@ int main() {
 
 	while(1) {
 		struct sockaddr_in addr = { 0 };
-		socklen_t len;
+		socklen_t len = sizeof(struct sockaddr_in);
 
 		int newsd = accept(sd, (struct sockaddr*) &addr, &len);
 		if(newsd > 0) {

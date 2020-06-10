@@ -30,7 +30,7 @@ int main() {
 		memset(buf, 0, 256);
 
 		struct sockaddr_in fromaddr = { 0 };
-		socklen_t fromaddrlen;
+		socklen_t fromaddrlen = sizeof(struct sockaddr_in);
 		recvfrom(sd, (void*) buf, 255, 0, (struct sockaddr*) &fromaddr, &fromaddrlen); 
 		printf("datagram from %s (now dst port %d)\n", 
 				inet_ntoa(fromaddr.sin_addr), ntohs(fromaddr.sin_port));
