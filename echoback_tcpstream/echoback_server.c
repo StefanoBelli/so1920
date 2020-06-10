@@ -36,7 +36,15 @@ int main() {
 
 		int newsd = accept(sd, (struct sockaddr*) &addr, &len);
 		if(newsd > 0) {
-			printf("received connection: %s port: %d\n", inet_ntoa(addr.sin_addr), addr.sin_port);
+			struct sockaddr_in local_addr = { 0 };
+			socklen_t local_addrlen = sizeof(struct sockaddr_in);
+
+			getsockname(newsd, (struct sockaddr*) &local_addr, &local_addrlen);
+			printf("received connection: %s port: %d (src=%s,srcport=%d)\n", 
+					inet_ntoa(addr.sin_addr), 
+					ntohs(addr.sin_port), 
+					inet_ntoa(local_addr.sin_addr), 
+					ntohs(local_addr.sin_port));
 			char buf[256] = { 0 };
 			while(recv(newsd, buf, 255, 0) > 0) {
 				send(newsd, buf, strlen(buf) + 1, MSG_NOSIGNAL);
