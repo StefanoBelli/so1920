@@ -7,7 +7,15 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#ifdef MP
+#include <signal.h>
+#endif //MP
+
 int main() {
+#ifdef MP
+	signal(SIGCHLD, SIG_IGN);
+#endif //MP
+
 	int sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if(sd < 0) {
 		perror("socket");
@@ -23,6 +31,10 @@ int main() {
 		close(sd);
 		return EXIT_FAILURE;
 	}
+
+	int opt_reuseaddr = 1;
+	if(setsockopt(sd, SOL_SOCKET, SO_REUSEADDR, &opt_reuseaddr, sizeof(int)) < 0)
+		perror("setsockopt(SO_REUSEADDR)");
 
 	if(listen(sd, 2) < 0) {
 		perror("listen");
@@ -45,12 +57,32 @@ int main() {
 					ntohs(addr.sin_port), 
 					inet_ntoa(local_addr.sin_addr), 
 					ntohs(local_addr.sin_port));
+
+#ifdef TO
+			struct timeval timeout;      
+			timeout.tv_sec = TO;
+			timeout.tv_usec = 0;
+
+			if(setsockopt(newsd, SOL_SOCKET, SO_RCVTIMEO, (void*)&timeout, sizeof(struct timeval)) < 0)
+				perror("setsockopt");
+#endif //TO
+
+#ifdef MP
+			if(fork() == 0) {
+				close(sd);
+#endif //MP				
 			char buf[256] = { 0 };
 			while(recv(newsd, buf, 255, 0) > 0) {
 				send(newsd, buf, strlen(buf) + 1, MSG_NOSIGNAL);
 				memset(buf, 0, 256);
 			}
-			close(newsd);
+#ifdef MP
+				close(newsd);
+			} else {
+				close(newsd);
+			}
+#endif //MP
+
 		}
 	}
 
